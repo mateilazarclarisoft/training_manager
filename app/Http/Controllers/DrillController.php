@@ -89,8 +89,16 @@ class DrillController extends Controller
             'name' => 'required',
             'description' => 'required',
         ]);
+    }
 
-        
+    public function search(Request $request)
+    {
+        if ($request->isMethod("post")){
+            $search = $request->get("name");
+            $drills = Drill::where('name','like','%'.$search.'%')->paginate(5);
+            return view('drills.index',compact('drills'))
+                ->with(request()->input('page'));
+        }
 
     }
 

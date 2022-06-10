@@ -4,7 +4,11 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="pull-left">
-                <h2>Laravel 8 CRUD Example</h2>
+                <form action="{{ url('search') }}" method="POST">
+                    {{ csrf_field() }}
+                    <input type="text" name="name" value=""/>
+                    <input type="submit" value="Search" class="btn"/>
+                </form>
             </div>
             <div class="pull-right">
                 <a class="btn btn-success" href="{{ route('drills.create') }}"> Create New Drill</a>

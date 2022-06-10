@@ -30,3 +30,5 @@ Route::prefix('algorithms')->group(function () {
         // Matches The "/admin/users" URL
     });    
 });
+
+Route::any('search','App\Http\Controllers\DrillController@search');
