@@ -4,9 +4,9 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="pull-left">
-                <form action="{{ url('search') }}" method="POST">
+                <form action="{{ url('search') }}" method="GET">
                     {{ csrf_field() }}
-                    <input type="text" name="name" value=""/>
+                    <input type="text" name="name" value="{{ $search }}"/>
                     <input type="submit" value="Search" class="btn"/>
                 </form>
             </div>

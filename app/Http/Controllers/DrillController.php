@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class DrillController extends Controller
 {
+    private string $searchParameter = "";
     /**
      * Display a listing of the resource.
      *
@@ -15,9 +16,9 @@ class DrillController extends Controller
      */
     public function index()
     {
-        $drills = Drill::latest()->paginate(5);
-
-        return view('drills.index',compact('drills'))
+        $drills = Drill::select('id','name')->orderBy('id','asc')->paginate(2);
+        $search = $this->searchParameter;
+        return view('drills.index',compact('drills','search'))
             ->with(request()->input('page'));
     }
 
@@ -93,12 +94,15 @@ class DrillController extends Controller
 
     public function search(Request $request)
     {
-        if ($request->isMethod("post")){
-            $search = $request->get("name");
-            $drills = Drill::where('name','like','%'.$search.'%')->paginate(5);
-            return view('drills.index',compact('drills'))
-                ->with(request()->input('page'));
-        }
+        $this->searchParameter = $request->get("name");
+        $drills = Drill::where('name','like','%'.$this->searchParameter.'%')
+            ->orderBy('id')
+            ->paginate(3);
+        $drills->appends($request->all());
+        $search =$this->searchParameter;
+        return view('drills.index',compact('drills','search'))
+            ->with(request()->input('page'));
+
 
     }
 
