@@ -1,0 +1,15 @@
+.collapse.show {
+    display: block;
+  }
+
+  #searchForm input[type=text]{
+    position:relative;
+    top: 5px;
+  }
+  
+  #searchForm input[type=submit]{
+    position:relative;
+    top: 2px;
+  }
+
+  

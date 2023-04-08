@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tags', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+        Schema::table('session_drills', function($table)
+        {
+            $table->string('comment')->nullable()->change();
+            $table->string('feedback')->nullable()->change();
+            $table->integer('stars')->default(0)->change();
+        }); 
     }
 
     /**
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tags');
+        //
     }
 };

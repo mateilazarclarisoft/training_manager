@@ -1,14 +1,15 @@
 @extends('layout')
 
+
 @section('content')
 
 <div class="row">
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
-            <h2>Add New Drill</h2>
+            <h2>Add New session</h2>
         </div>
         <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('drills.index') }}"> Back</a>
+            <a class="btn btn-primary" href="{{ route('sessions.index') }}"> Back</a>
         </div>
     </div>
 </div>
@@ -24,32 +25,20 @@
     </div>
 @endif
 
-<form action="{{ route('drills.store') }}" method="POST">
+<form action="{{ route('sessions.store') }}" method="POST">
     @csrf
 
      <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
-                <strong>Name:</strong>
+                <strong>Session:</strong>
                 <input type="text" name="name" class="form-control" placeholder="Name">
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
-                <strong>Description:</strong>
-                <textarea class="form-control editme" name="description" placeholder="Description"></textarea>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Link:</strong>
-                <textarea class="form-control" style="height:150px" name="link" placeholder="Link"></textarea>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Tags:</strong>
-                <select class="form-control" multiple="multiple" name="tags[]" id="tags">
+                <strong>Tag:</strong>
+                <select class="form-control"  name="tag" id="tag">
                     @foreach($tags as $key => $tag)                            
                             <option value="{{$tag->id}}">{{$tag->name}}</option>
                     @endforeach

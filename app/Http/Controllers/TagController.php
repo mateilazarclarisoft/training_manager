@@ -14,7 +14,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::latest()->paginate(5);
+        $tags = Tag::first()->paginate(10);
 
         return view('tags.index',compact('tags'))
             ->with(request()->input('page'));
@@ -54,9 +54,14 @@ class TagController extends Controller
      * @param  \App\Models\Tag  $Tag
      * @return \Illuminate\Http\Response
      */
-    public function show(Tag $Tag)
+    public function show(Tag $tag)
     {
-        return view('tags.show',compact('Tag'));
+        $drills = $tag->drillTags()
+            ->join("drills","drills.id","=","drill_tags.drill_id")
+            ->where("drill_tags.tag_id","=",$tag->id)
+            ->select('drills.id','drills.name','drills.description','drills.link')
+            ->paginate(10);
+        return view('tags.show',compact('tag','drills'));
     }
 
     /**

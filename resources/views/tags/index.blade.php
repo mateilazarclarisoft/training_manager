@@ -1,10 +1,10 @@
-@extends('tags.layout')
+@extends('layout')
 
 @section('content')
     <div class="row">
         <div class="col-lg-12">
             <div class="pull-left">
-                <h2>Laravel 8 CRUD Example</h2>
+                <h2>Tags</h2>
             </div>
             <div class="pull-right">
                 <a class="btn btn-success" href="{{ route('tags.create') }}"> Create New Tag</a>
@@ -20,13 +20,11 @@
 
     <table class="table table-bordered">
         <tr>
-            <th>ID</th>
             <th>Name</th>
             <th width="280px">Action</th>
         </tr>
         @foreach ($tags as $tag)
         <tr>
-            <td>{{ $tag->id }}</td>
             <td>{{ $tag->name }}</td>
             <td>
                 <form action="{{ route('tags.destroy',$tag->id) }}" method="POST">

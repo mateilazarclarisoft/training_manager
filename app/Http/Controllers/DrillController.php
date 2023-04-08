@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Drill;
+use App\Models\DrillTag;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\In;
 
 class DrillController extends Controller
 {
@@ -16,7 +18,7 @@ class DrillController extends Controller
      */
     public function index()
     {
-        $drills = Drill::select('id','name')->orderBy('id','asc')->paginate(2);
+        $drills = Drill::select('id','name','description','link')->orderBy('id','asc')->paginate(10);
         $search = $this->searchParameter;
         return view('drills.index',compact('drills','search'))
             ->with(request()->input('page'));
@@ -29,7 +31,8 @@ class DrillController extends Controller
      */
     public function create()
     {
-        return view("drills.create");
+        $tags = Tag::all();
+        return view("drills.create",compact("tags"));
     }
 
     /**
@@ -42,15 +45,25 @@ class DrillController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'description' => 'required',
+            'description' => 'required_without:link',
+            'link' => 'required_without:description'
         ]);
 
         $drill = new Drill();        
         $drill->name = $request['name'];
         $drill->description = $request['description'];
+        $drill->link = $request['link'];
         $drill->save();
 
-        return redirect()->route('drills.index')
+        foreach ($request['tags'] as $tagId){
+            $drillTag = new DrillTag();
+            $drillTag->drill_id = $drill->id;
+            $drillTag->tag_id = $tagId;
+            $drillTag->save();
+        }
+        
+
+        return redirect()->route('drills.show',$drill->id)
                         ->with('success','Drill created successfully.');
     }
 
@@ -62,7 +75,13 @@ class DrillController extends Controller
      */
     public function show(Drill $drill)
     {
-        return view('drills.show',compact('drill'));
+        $tags = Drill::select('tags.id','tags.name')
+            ->join("drill_tags","drills.id","=","drill_tags.drill_id")
+            ->join("tags","tags.id","=","drill_tags.tag_id")
+            ->where("drills.id","=",$drill->id)
+            ->distinct()
+            ->get();
+        return view('drills.show',compact('drill','tags'));
     }
 
     /**
@@ -74,7 +93,11 @@ class DrillController extends Controller
     public function edit(Drill $drill)
     {
         $tags = Tag::all();
-        return view('drills.edit',compact('drill'),compact('tags'));
+        $drillTags = DrillTag::where('drill_id','=',$drill->id)
+            ->pluck('tag_id')
+            ->toArray();
+
+        return view('drills.edit',compact('drill','tags','drillTags'));
     }
 
     /**
@@ -88,8 +111,35 @@ class DrillController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'description' => 'required',
+            'description' => 'required_without:link',
+            'link' => 'required_without:description'
         ]);
+   
+        $drill->name = $request['name'];
+        $drill->description = $request['description'];
+        $drill->link = $request['link'];
+        $drill->save();
+
+        $existingTags = [];
+        foreach($drill->drillTags()->get() as $drillTag){
+            if (! in_array($drillTag->tag_id,$request['tags'])){
+                $drillTag->delete();
+            } else {
+                $existingTags[] = $drillTag->tag_id;
+            }
+        }
+
+        foreach ($request['tags'] as $tagId){
+            if (! in_array($tagId,$existingTags)){
+                $drillsTag = new DrillTag();
+                $drillsTag->tag_id = $tagId;
+                $drillsTag->drill_id = $drill->id;
+                $drillsTag->save();
+            }            
+        }
+
+        return redirect()->route('drills.show',$drill->id)
+            ->with('success','Drill updated successfully.');
     }
 
     public function search(Request $request)
@@ -97,14 +147,13 @@ class DrillController extends Controller
         $this->searchParameter = $request->get("name");
         $drills = Drill::where('name','like','%'.$this->searchParameter.'%')
             ->orderBy('id')
-            ->paginate(3);
+            ->paginate(10);
         $drills->appends($request->all());
         $search =$this->searchParameter;
         return view('drills.index',compact('drills','search'))
             ->with(request()->input('page'));
-
-
     }
+
 
     /**
      * Remove the specified resource from storage.
