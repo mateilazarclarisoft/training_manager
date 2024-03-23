@@ -1,3 +1,6 @@
+var all = false;
 function AllTags(){
-    $('input[type="checkbox"]').prop("checked", true)
+    $('#all').text(all ? "All" : "Clear")
+    all = ! all;
+    $('input[type="checkbox"]').prop("checked", all)    
 }

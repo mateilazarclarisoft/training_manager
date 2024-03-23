@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DrillTag;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -70,9 +71,9 @@ class TagController extends Controller
      * @param  \App\Models\Tag  $Tag
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tag $Tag)
+    public function edit(Tag $tag)
     {
-        return view('tags.edit',compact('Tag'));
+        return view('tags.edit',compact('tag'));
     }
 
     /**
@@ -82,9 +83,17 @@ class TagController extends Controller
      * @param  \App\Models\Tag  $Tag
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tag $Tag)
+    public function update(Request $request, Tag $tag)
     {
-        //
+        $request->validate([
+            'name' => 'required'
+        ]);
+   
+        $tag->name = $request['name'];
+        $tag->save();
+
+        return redirect()->route('tags.show',$tag->id)
+            ->with('success','Tag updated successfully.');
     }
 
     /**
@@ -93,9 +102,10 @@ class TagController extends Controller
      * @param  \App\Models\Tag  $Tag
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tag $Tag)
+    public function destroy(Tag $tag)
     {
-        $Tag->delete();
+        DrillTag::where("tag_id",$tag->id)->delete();
+        $tag->delete();
 
         return redirect()->route('tags.index')
                         ->with('success','Tag deleted successfully');

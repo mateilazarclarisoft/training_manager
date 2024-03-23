@@ -32,20 +32,36 @@
             <tr>
                 <th>Name</th>
                 <th>Tag</th>
-                <th width="280px">Action</th>
+                <th width="450px">Action</th>
             </tr>
             @foreach ($sessions as $session)
             <tr>
                 <td>{{ $session->name }}</td>
                 <td>{{ $session->tag->name }}</td>
                 <td>
-                    <form action="{{ route('sessions.destroy',$session->id) }}" method="POST">
-                        <a class="btn btn-info" href="{{ route('sessions.show',$session->id) }}">Show</a>
-                        <a class="btn btn-primary" href="{{ route('sessions.edit',$session->id) }}">Edit</a>
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <a class="btn btn-info" href="{{ route('sessions.show',$session->id) }}">Show</a>
+                        </div>
+                        <div class="col-lg-2">
+                            <a class="btn btn-primary" href="{{ route('sessions.edit',$session->id) }}">Edit</a>
+                        </div>
+                        <div class="col-lg-2">
+                            <form action="{{ route('sessions.destroy',$session->id) }}" method="POST" class="form-inline" >                        
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>                        
+                            </form>
+                        </div>
+                        <div class="col-lg-2">
+                            <form action="{{ route('sessions.duplicate',$session->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-info">Duplicate</button>
+                            </form>
+                        </div>
+                        <div class="col-lg-4"></div>
+                      </div>
                 </td>
             </tr>
             @endforeach

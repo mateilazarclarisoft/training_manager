@@ -1,8 +1,6 @@
 @extends('layout')
 
-@push('head')
-<script src="{{ asset('js/search.js') }}"></script>
-@endpush
+
 
 @section('content')
     <div class="row">

@@ -1,3 +1,7 @@
+@push('head')
+<script src="{{ asset('js/search.js') }}"></script>
+@endpush
+
 {{ csrf_field() }}
 
 <div class="btn-group">
@@ -6,7 +10,7 @@
         Tags
     </button>
     <div class="dropdown-menu">
-        <a class="dropdown-item" href="#" onclick="AllTags()">All</a>
+        <a class="dropdown-item" href="#" onclick="AllTags()" id="all">All</a>
         <div class="dropdown-divider"></div>
         @foreach ($tags as $tag)
             <div class="dropdown-item">

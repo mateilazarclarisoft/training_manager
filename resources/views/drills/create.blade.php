@@ -48,6 +48,12 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
+                <strong>Video:</strong>
+                <input type="file"  name="video" placeholder="Video">
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
                 <strong>Tags:</strong>
                 <select class="form-control" multiple="multiple" name="tags[]" id="tags">
                     @foreach($tags as $key => $tag)                            

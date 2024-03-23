@@ -5,9 +5,7 @@
         <div class="col-lg-12">
             <div class="pull-left">
                 <form action="{{ url('drills/search') }}" method="GET" id="searchForm">
-                    {{ csrf_field() }}
-                    <input type="text" name="name" value="{{ $search }}"/>
-                    <input type="submit" value="Search" class="btn"/>
+                    @include('session_drills/search')
                 </form>
             </div>
             <div class="pull-right">

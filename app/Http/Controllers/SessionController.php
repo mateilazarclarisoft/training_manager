@@ -126,6 +126,15 @@ class SessionController extends Controller
         //
     }
 
+    public function duplicate($id)
+    {
+        $session = Session::find($id);
+        $generator = new Generator($session);
+        $duplicateSessionId = $generator->duplicate();
+
+        return redirect()->route('sessions.show',$duplicateSessionId);        
+    }
+
     public function generate($id)
     {
         $session = Session::find($id);

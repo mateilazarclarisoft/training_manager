@@ -1,15 +1,9 @@
-.collapse.show {
-    display: block;
-  }
+.box-container{
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
+}
 
-  #searchForm input[type=text]{
-    position:relative;
-    top: 5px;
-  }
-  
-  #searchForm input[type=submit]{
-    position:relative;
-    top: 2px;
-  }
-
-  
+.content{
+    flex-grow : 1;
+}

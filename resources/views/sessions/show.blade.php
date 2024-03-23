@@ -40,6 +40,7 @@
                         @method('PUT')
                         <button type="submit" class="btn btn-primary">Regenerate</button>                        
                     </form>
+                    <br />
                     <strong>Drills:</strong>
                     <br />
 

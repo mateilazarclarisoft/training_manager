@@ -16,11 +16,20 @@ class DrillController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $tags = Tag::all();
+
         $drills = Drill::select('id','name','description','link')->orderBy('id','asc')->paginate(10);
+
         $search = $this->searchParameter;
-        return view('drills.index',compact('drills','search'))
+
+        $tagIds = $request->get("tags");
+        if (empty($tagIds)){
+            $tagIds = [];
+        }
+
+        return view('drills.index',compact('drills','search','tags','tagIds'))
             ->with(request()->input('page'));
     }
 
@@ -53,6 +62,13 @@ class DrillController extends Controller
         $drill->name = $request['name'];
         $drill->description = $request['description'];
         $drill->link = $request['link'];
+
+        if ($request->hasFile('video'))
+        {
+            $path = $request->file('video')->store('videos', ['disk' => 'my_files']);
+            $drill->video = $path;
+        }
+
         $drill->save();
 
         foreach ($request['tags'] as $tagId){
@@ -118,6 +134,13 @@ class DrillController extends Controller
         $drill->name = $request['name'];
         $drill->description = $request['description'];
         $drill->link = $request['link'];
+
+        if ($request->hasFile('video'))
+        {
+            $path = $request->file('video')->store('videos', ['disk' => 'my_files']);
+            $drill->video = $path;
+        }
+        
         $drill->save();
 
         $existingTags = [];
@@ -144,13 +167,33 @@ class DrillController extends Controller
 
     public function search(Request $request)
     {
-        $this->searchParameter = $request->get("name");
-        $drills = Drill::where('name','like','%'.$this->searchParameter.'%')
+        $tags = Tag::all();
+
+        $tagIds = $request->get("tags");
+        if (empty($tagIds)){
+            $tagIds = [];
+        }
+
+        $search = $request->get("name");
+
+        $drillsQuery = Drill::select('drills.id','drills.name','drills.description','drills.link')
+            ->distinct()
+            ->join("drill_tags","drills.id","=","drill_tags.drill_id")
+            ->join("tags","tags.id","=","drill_tags.tag_id")
+            ->where('drills.name','like','%'.$search.'%')
+            ;
+
+        if (! empty($tagIds)){
+            $drillsQuery = $drillsQuery->whereIn("tags.id",$tagIds);
+        }       
+
+        $drills = $drillsQuery
             ->orderBy('id')
             ->paginate(10);
+
         $drills->appends($request->all());
-        $search =$this->searchParameter;
-        return view('drills.index',compact('drills','search'))
+
+        return view('drills.index',compact('drills','search','tags','tagIds'))
             ->with(request()->input('page'));
     }
 

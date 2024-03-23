@@ -17,12 +17,27 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Description:</strong>
+                <br />
                 @if (!@empty($drill->description))
                      {!! $drill->description !!}<br />
                 @endif        
                 {!!  $drill->link  !!}
             </div>
         </div>
+        @if (!@empty($drill->video))
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Video:</strong>
+                <br />                
+                <video width="320" height="240" controls>
+                    <source src="/{!!  $drill->video  !!}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>        
+                
+            </div>
+        </div>
+        @endif 
+        
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Tags:</strong>

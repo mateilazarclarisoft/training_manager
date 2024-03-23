@@ -1,3 +1,4 @@
+@push('head')
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
@@ -43,6 +44,8 @@
         });
     });
 </script>
+@endpush
+
 
 <div class="accordion" id="accordionPanels">
     <div class="list list-row card" id="sortable" data-sortable-id="0" aria-dropeffect="move">
@@ -98,4 +101,5 @@
             </div>
         @endforeach
     </div>
+
 </div>

@@ -23,7 +23,7 @@
         </div>
     @endif
 
-    <form action="{{ route('drills.update',$drill->id) }}" method="POST">
+    <form action="{{ route('drills.update',$drill->id) }}" method="POST" enctype="multipart/form-data" >
         @csrf
         @method('PUT')
 
@@ -37,13 +37,19 @@
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Description:</strong>
-                    <textarea class="form-control" style="height:150px" name="description" placeholder="Description">{{ $drill->description }}</textarea>
+                    <textarea class="form-control editme" style="height:150px" name="description" placeholder="Description">{{ $drill->description }}</textarea>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Link:</strong>
                     <input type="text" name="link" value="{{ $drill->link }}" class="form-control" placeholder="Link">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    <strong>Video:</strong>
+                    <input type="file"  name="video" placeholder="Video">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12">
