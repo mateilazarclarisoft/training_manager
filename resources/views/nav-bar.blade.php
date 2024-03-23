@@ -20,12 +20,14 @@
             <li class="nav-item">
                 <a class="nav-link @if(Str::is("tags*",  Route::currentRouteName()))  active @endif" href="{{ route('tags.index') }}">Tags</a>
             </li>
+            @can('view-admin-section')
             <li class="nav-item">
                 <a class="nav-link @if(Str::is("roles*",  Route::currentRouteName()))  active @endif" href="{{ route('roles.index') }}">Roles</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link @if(Str::is("users*",  Route::currentRouteName()))  active @endif" href="{{ route('users.index') }}">Users</a>
             </li>
+            @endcan
         </ul>
 
         <!-- Right Side Of Navbar -->

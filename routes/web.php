@@ -8,6 +8,7 @@ use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Sort;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\RedirectIfNotAuthorized;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,8 +39,6 @@ Route::resource('drills', DrillController::class)->middleware(['auth']);
 
 Route::resource('tags', TagController::class);
 
-Route::resource('roles', RoleController::class);
-
 Route::any('sessions/search','App\Http\Controllers\SessionController@search');
 Route::put('sessions/generate/{id}', [SessionController::class, 'generate'])->name('sessions.generate');
 Route::put('sessions/regenerate/{id}', [SessionController::class, 'regenerate'])->name('sessions.regenerate');
@@ -57,4 +56,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('users', UserController::class);
+Route::middleware([RedirectIfNotAuthorized::class])->group(function () {
+
+    Route::resource('users', UserController::class);
+
+    Route::resource('roles', RoleController::class);
+    
+});
